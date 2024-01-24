@@ -2,7 +2,7 @@
 <html lang="en" data-bs-theme="dark">
 
 <head>
-    <title>App Name a Coding Challange</title>
+    <title>Rotate Array a Coding Challange</title>
     <!-- Required meta tags -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -26,17 +26,19 @@
 
     <main class="mb-5">
         <div class="container mt-5">
-            <h1>App Name</h1>
+            <h1>Rotate Array</h1>
             <p class="lead">
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Tempora doloribus numquam nesciunt maiores
-                repellendus dolorum. Esse voluptatem odit est iusto alias, vel quaerat laboriosam nobis.
+                This application takes a list of items provided by the user and rotates them by a specified number of
+                steps, displaying
+                the rearranged list on the screen, ensuring that the user input is valid and providing clear error
+                messages when needed.
             </p>
             <ul class="checklist">
-                <li><i class="bi bi-check2-square"></i>Lorem ipsum dolor sit amet.</li>
-                <li><i class="bi bi-check2-square"></i>Lorem ipsum dolor sit amet.</li>
-                <li><i class="bi bi-check2-square"></i>Lorem ipsum dolor sit amet.</li>
-                <li><i class="bi bi-check2-square"></i>Lorem ipsum dolor sit amet.</li>
-                <li><i class="bi bi-check2-square"></i>Lorem ipsum dolor sit amet.</li>
+                <li><i class="bi bi-check2-square"></i>Input Validation</li>
+                <li><i class="bi bi-check2-square"></i>Modularization</li>
+                <li><i class="bi bi-check2-square"></i>Readable Variable Names</li>
+                <li><i class="bi bi-check2-square"></i>Error Handling</li>
+                <li><i class="bi bi-check2-square"></i>Use of Descriptive Comments</li>
             </ul>
         </div>
         <div class="container mt-5">
@@ -47,25 +49,17 @@
                         <!-- Input -->
                         <form>
                             <div class="form-floating mb-3">
-                                <input type="number" class="form-control" id="number-input" value="1">
-                                <label for="number-input">Number Input</label>
+                                <input type="number" class="form-control" id="steps-Input" value="3" min="0" max="15">
+                                <label for="steps-Input">Rotation Steps</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <input class="form-control" id="string-Input" value="Example text">
-                                <label for="string-Input">String Input</label>
-                            </div>
-                            <div class="form-floating mb-3">
-                                <select class="form-select" id="select-input">
-                                    <option selected>Open this select menu</option>
-                                    <option value="1">One</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
-                                </select>
-                                <label for="floatingSelect">Works with selects</label>
+                                <input class="form-control" id="user-Input" value="1, 4, Lorem, World, 5.3"
+                                    maxlength="150">
+                                <label for="user-Input">Enter List of Items</label>
                             </div>
                             <div class="text-end">
-                                <button class="btn btn-outline-primary btn-lg" onclick="getValues()"
-                                    type="button">Controller Function Trigger</button>
+                                <button class="btn btn-outline-primary btn-lg" onclick="handleUserInput()"
+                                    type="button">Apply Rotation</button>
                             </div>
                         </form>
                     </div>
@@ -73,11 +67,11 @@
                 <div class="col-sm-8 order-first order-sm-0">
                     <p class="lead">Instructions</p>
                     <ol>
-                        <li>Lorem ipsum dolor sit amet.</li>
-                        <li>Lorem ipsum dolor sit amet.</li>
-                        <li>Lorem ipsum dolor sit amet.</li>
-                        <li>Lorem ipsum dolor sit amet.</li>
-                        <li>Lorem ipsum dolor sit amet.</li>
+                        <li>Enter the number of steps for rotation in the designated input field.</li>
+                        <li>Provide a list of items separated by commas in the input field.</li>
+                        <li>Ensure the list contains no more than 100 elements.</li>
+                        <li>Click the "Apply Rotation" button to perform the rotation.</li>
+                        <li>View the rotated result displayed below the input fields.</li>
                     </ol>
                 </div>
                 <div class="col-12">
@@ -96,34 +90,91 @@
             <div class="card bg-body-secondary mt-4 mb-3">
                 <div class="row g-0">
                     <div class="col-md-4">
-                        <button onclick="expandThumnail('firstFunctionThumnail', 'firstFunctionContent')" type="button"
-                            data-bs-toggle="modal" data-bs-target="#firstFunctionModal" id="firstFunctionThumnail"
-                            class="p-2 w-100 thumbnailCode hover-zoom bg-body-secondary">
+                        <button onclick="expandThumnail('handleUserInputThumnail', 'handleUserInputContent')"
+                            type="button" data-bs-toggle="modal" data-bs-target="#handleUserInputModal"
+                            id="handleUserInputThumnail" class="p-2 w-100 thumbnailCode hover-zoom bg-body-secondary">
                             <pre class="line-numbers rounded">
-                                <code class="language-JS"></code>
+                                <code class="language-JS">
+                                    // Controller
+function handleUserInput() {
+
+    // Get inputs from the DOM
+    let stepsAmount = document.getElementById('steps-Input').value;
+    let userInput = document.getElementById('user-Input').value;
+
+    // Format inputs
+    stepsAmount = parseInt(stepsAmount);
+    let userInputArray = userInput.split(',');
+
+    // Validate Steps Amount
+    if (Number.isNaN(stepsAmount)) {
+        // Display error for invalid steps amount
+        Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: `Invalid steps amount. Please enter an integer.`,
+        });
+        return;
+    } else if (stepsAmount &lt; 0 || stepsAmount > 15) {
+        // Display error for steps amount out of range
+        Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: `Invalid steps amount. Please enter a valid number between 0 and 15.`,
+        });
+        return;
+    }
+
+    // Validate User Input Array
+    if (userInputArray.length > 100) {
+        // Display error for exceeding maximum input length
+        Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: `Invalid user input. Please enter a comma-separated list with a maximum of 100 elements.`,
+        });
+        return;
+    } else if (userInputArray.length == 0) {
+        // Display error for empty user input array
+        Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: `Invalid user input. Make sure to separate each element using commas.`,
+        });
+        return;
+    }
+
+    // Rotate Array
+    let rotatedArray = rotateArrayElements(userInputArray, stepsAmount);
+
+    // Display result
+    displayResults(rotatedArray, stepsAmount);
+}
+                                </code>
                             </pre>
                         </button>
                     </div>
                     <div class="col-md-8">
                         <div class="card-body h-100">
-                            <h5 class="card-title">Controller (firstFunction)</h5>
+                            <h5 class="card-title">Controller (handleUserInput)</h5>
                             <p class="card-text">
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni quidem assumenda libero,
-                                cum mollitia animi fugit porro aut amet dignissimos, sed quia similique dolor vitae?
-                                Sint eum dolore atque voluptate!
+                                Takes user inputs, validates them, and triggers the rotation process, ensuring a smooth
+                                experience for users by handling
+                                errors and displaying the rotated result.
                             </p>
                             <!-- Modal -->
-                            <div class="modal fade modal-lg" id="firstFunctionModal" tabindex="-1"
-                                aria-labelledby="firstFunctionModalLabel" aria-hidden="true">
+                            <div class="modal fade modal-lg" id="handleUserInputModal" tabindex="-1"
+                                aria-labelledby="handleUserInputModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h1 class="modal-title fs-5" id="firstFunctionModalLabel">firstFunction()
+                                            <h1 class="modal-title fs-5" id="handleUserInputModalLabel">
+                                                handleUserInput()
                                             </h1>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                 aria-label="Close"></button>
                                         </div>
-                                        <div id="firstFunctionContent" class="modal-body fullCode">
+                                        <div id="handleUserInputContent" class="modal-body fullCode">
                                             <pre class="line-numbers"></pre>
                                         </div>
                                         <div class="modal-footer">
@@ -141,35 +192,69 @@
             <div class="card bg-body-secondary mt-4 mb-3">
                 <div class="row g-0">
                     <div class="col-md-4">
-                        <button onclick="expandThumnail('secondFunctionThumnail', 'secondFunctionContent')"
-                            type="button" data-bs-toggle="modal" data-bs-target="#secondFunctionModal"
-                            id="secondFunctionThumnail" class="p-2 w-100 thumbnailCode hover-zoom  bg-body-secondary">
+                        <button onclick="expandThumnail('rotateArrayElementsThumnail', 'rotateArrayElementsContent')"
+                            type="button" data-bs-toggle="modal" data-bs-target="#rotateArrayElementsModal"
+                            id="rotateArrayElementsThumnail"
+                            class="p-2 w-100 thumbnailCode hover-zoom  bg-body-secondary">
                             <pre class="line-numbers rounded">
-                                <code class="language-JS"></code>
+                                <code class="language-JS">
+                                    // Logic
+function rotateArrayElements(inputArray, steps) {
+
+    // Empty array to store results
+    let resultArray = [];
+
+    // Format steps to be within range of the length of the array
+    while (steps >= inputArray.length) {
+
+        steps -= inputArray.length;
+    }
+
+    // Add each element to the new array at the new index
+    for (let i = steps; i &lt; (inputArray.length + steps); i++) {
+
+        if (i &lt; inputArray.length) {
+
+            // Index within range
+            const element = inputArray[i];
+            resultArray.push(element);
+
+        } else {
+
+            // Index out of range
+            const element = inputArray[i - inputArray.length];
+            resultArray.push(element);
+        }
+    }
+
+    // Return result
+    return resultArray;
+}
+                                </code>
                             </pre>
                         </button>
                     </div>
                     <div class="col-md-8">
                         <div class="card-body h-100">
-                            <h5 class="card-title">Logic (secondFunction)</h5>
+                            <h5 class="card-title">Logic (rotateArrayElements)</h5>
                             <p class="card-text">
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda, fugit, quasi
-                                mollitia voluptate culpa quibusdam delectus quam nemo magnam error saepe similique
-                                reprehenderit totam a architecto aperiam. Magnam, eaque voluptate!
+                                Rotates a list of items based on the specified number of steps, contributing the core
+                                logic to rearrange the elements in
+                                the user-provided list.
                             </p>
                             <!-- Modal -->
-                            <div class="modal fade modal-lg" id="secondFunctionModal" tabindex="-1"
-                                aria-labelledby="secondFunctionModalLabel" aria-hidden="true">
+                            <div class="modal fade modal-lg" id="rotateArrayElementsModal" tabindex="-1"
+                                aria-labelledby="rotateArrayElementsModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h1 class="modal-title fs-5" id="secondFunctionModalLabel">
-                                                secondFunction()
+                                            <h1 class="modal-title fs-5" id="rotateArrayElementsModalLabel">
+                                                rotateArrayElements()
                                             </h1>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                 aria-label="Close"></button>
                                         </div>
-                                        <div id="secondFunctionContent" class="modal-body fullCode">
+                                        <div id="rotateArrayElementsContent" class="modal-body fullCode">
                                             <pre class="line-numbers"></pre>
                                         </div>
                                         <div class="modal-footer">
@@ -187,34 +272,46 @@
             <div class="card bg-body-secondary mt-4 mb-3">
                 <div class="row g-0">
                     <div class="col-md-4">
-                        <button onclick="expandThumnail('thirdFunctionThumnail', 'thirdFunctionContent')" type="button"
-                            data-bs-toggle="modal" data-bs-target="#thirdFunctionModal" id="thirdFunctionThumnail"
-                            class="p-2 w-100 thumbnailCode hover-zoom bg-body-secondary">
+                        <button onclick="expandThumnail('displayResultsThumnail', 'displayResultsContent')"
+                            type="button" data-bs-toggle="modal" data-bs-target="#displayResultsModal"
+                            id="displayResultsThumnail" class="p-2 w-100 thumbnailCode hover-zoom bg-body-secondary">
                             <pre class="line-numbers rounded">
-                                <code class="language-JS"></code>
+                                <code class="language-JS">
+                                    // View
+function displayResults(rotatedArray, steps) {
+
+    // Format as HTML
+    let results = `&lt;span class="text-muted">Rotated by ${steps} steps&lt;/span>&lt;br>
+                   &lt;h1 class="text-muted">[&lt;span class="text-primary fs-2">${rotatedArray}&lt;/span> ]&lt;/h1>`;
+
+    // Display to DOM
+    document.getElementById('results').innerHTML = results;
+    document.getElementById('resultsContainer').classList.remove('d-none');;
+}
+                                </code>
                             </pre>
                         </button>
                     </div>
                     <div class="col-md-8">
                         <div class="card-body h-100">
-                            <h5 class="card-title">View (thirdFunction)</h5>
+                            <h5 class="card-title">View (displayResults)</h5>
                             <p class="card-text">
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officia rerum consequatur ad
-                                reiciendis! Odio assumenda tempore consequuntur autem quia. Laboriosam voluptatem id
-                                sunt ad esse asperiores maiores harum a repellat?
+                                Formats and displays the rotated list along with the number of steps, ensuring a clear
+                                and visually appealing
+                                presentation of the outcome to the user.
                             </p>
                             <!-- Modal -->
-                            <div class="modal fade modal-lg" id="thirdFunctionModal" tabindex="-1"
-                                aria-labelledby="thirdFunctionModalLabel" aria-hidden="true">
+                            <div class="modal fade modal-lg" id="displayResultsModal" tabindex="-1"
+                                aria-labelledby="displayResultsModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h1 class="modal-title fs-5" id="thirdFunctionModalLabel">thirdFunction()
+                                            <h1 class="modal-title fs-5" id="displayResultsModalLabel">displayResults()
                                             </h1>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                 aria-label="Close"></button>
                                         </div>
-                                        <div id="thirdFunctionContent" class="modal-body fullCode">
+                                        <div id="displayResultsContent" class="modal-body fullCode">
                                             <pre class="line-numbers"></pre>
                                         </div>
                                         <div class="modal-footer">
